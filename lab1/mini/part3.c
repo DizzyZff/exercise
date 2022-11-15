@@ -38,7 +38,10 @@ list_insert(struct list_node *head, int value)
 	assert(head != NULL);
 
 	// TODO: Your code here.
-	assert(0);
+	struct list_node *new_node = alloc_node();
+	new_node->value = value;
+	new_node->next = head->next;
+	head->next = new_node;
 }
 
 // Return a pointer to the last node in a linked list, starting
@@ -63,8 +66,11 @@ list_end(struct list_node *head)
 	assert(head != NULL);
 
 	// TODO: Your code here.
-	assert(0);
-	return NULL;
+	while (head->next != NULL) {
+		head = head->next;
+	}
+
+	return head;
 }
 
 // Return the number of nodes in a linked list, starting from the
@@ -89,8 +95,12 @@ list_size(struct list_node *head)
 	assert(head != NULL);
 
 	// TODO: Your code here.
-	assert(0);
-	return 0;
+	int size = 0;
+	while (head != NULL) {
+		size++;
+		head = head->next;
+	}
+	return size;
 }
 
 // Return a pointer to the first node in the given linked list
@@ -121,7 +131,15 @@ list_find(struct list_node *head, int value, struct list_node **predp)
 	assert(predp != NULL);
 
 	// TODO: Your code here.
-	assert(0);
+	*predp = NULL;
+	while (head != NULL) {
+		if (head->value == value) {
+			return head;
+		}
+		*predp = head;
+		head = head->next;
+	}
+	*predp = NULL;
 	return NULL;
 }
 
@@ -184,6 +202,16 @@ list_remove(struct list_node **headp, int value)
 	assert(*headp != NULL);
 
 	// TODO: Your code here.
-	assert(0);
-	return 0;
+	struct list_node *pred;
+	struct list_node *node = list_find(*headp, value, &pred);
+	if (node == NULL) {
+		return 0;
+	}
+	if (pred == NULL) {
+		*headp = node->next;
+	} else {
+		pred->next = node->next;
+	}
+	free_node(node);
+	return 1;
 }
